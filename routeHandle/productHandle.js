@@ -13,19 +13,8 @@ router.get("/:id", async (req, res) => {});
 //post product
 router.post("/", async (req, res) => {
   const newProduct = new Product(req.body);
-  await newProduct.save((err)=>{
-    if(err){
-        res.status(500).json({
-            error: "There was a server side error"
-        })
-    }
-    else{
-        res.status(200).json({
-            message: "Product was inserted successfully"
-        })
-    }
-    console.log(newProduct)
-  });
+  await newProduct.save();
+  console.log(newProduct);
 });
 
 //post multiple product
