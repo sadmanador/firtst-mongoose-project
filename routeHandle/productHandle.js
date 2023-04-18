@@ -19,12 +19,22 @@ router.post("/", async (req, res) => {
 
 //post multiple product
 router.post("/all", async (req, res) => {
-    const result  = await Product.insertMany(req.body);
-    console.log(result)
+  const result = await Product.insertMany(req.body);
+  console.log(result);
 });
 
 //put product
-router.get("/:id", async (req, res) => {});
+router.put("/:id", async (req, res) => {
+  const updatedData = req.body;
+  console.log(updatedData);
+  const result = await Product.updateOne(
+    { _id: req.params.id },
+    {
+      $set: updatedData
+    }
+  );
+  console.log(result);
+});
 
 //delete product
 router.delete("/:id", async (req, res) => {});
