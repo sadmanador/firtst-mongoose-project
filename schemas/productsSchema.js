@@ -20,16 +20,16 @@ const productSchema = mongoose.Schema({
   stock: Number,
   ratings: Number,
   ratingsCount: Number,
-  img:{
+  img: {
     type: String,
     required: true,
   },
   shipping: Number,
-  quantity: {
-    default: 0
-  },
-  Date:{
+  quantity: { type: Number },
+  Date: {
     type: Date,
     default: Date.now,
-  }
+  },
 });
+
+module.exports = productSchema;

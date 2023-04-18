@@ -30,7 +30,7 @@ const dataBase = (module.exports = () => {
 dataBase();
 
 //application routes
-app.use('/products', productHandler)
+app.use('/product', productHandler)
 
 
 //default error handler
