@@ -9,29 +9,45 @@ const Product = new mongoose.model("Product", productSchema);
 //select now blocks the Date, select take 0=false, 1=true
 //.limit(n) n= # selects n amount of data
 router.get("/", async (req, res) => {
-  const result = await Product.find({}).select({
-    Date: 0,
-  });
-  res.send(result);
+  try {
+    const result = await Product.find({}).select({
+      Date: 0,
+    });
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
 });
 
 //get a single product
 router.get("/:id", async (req, res) => {
-  const result = await Product.find({_id: req.params.id});
-  res.send(result);
+  try {
+    const result = await Product.find({ _id: req.params.id });
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
 });
 
 //post product
 router.post("/", async (req, res) => {
-  const newProduct = new Product(req.body);
-  await newProduct.save();
-  console.log(newProduct);
+  try {
+    const newProduct = new Product(req.body);
+    await newProduct.save();
+    console.log(newProduct);
+  } catch (error) {
+    console.log(error.message);
+  }
 });
 
 //post multiple product
 router.post("/all", async (req, res) => {
-  const result = await Product.insertMany(req.body);
-  console.log(result);
+  try {
+    const result = await Product.insertMany(req.body);
+    console.log(result);
+  } catch (error) {
+    console.error(error.message);
+  }
 });
 
 //put product
@@ -39,24 +55,32 @@ router.post("/all", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const updatedData = req.body;
 
-  const result = await Product.findByIdAndUpdate(
-    { _id: req.params.id },
-    {
-      $set: updatedData,
-    },
-    //third parameter
-    {
-      new: true,
-      useFindAndModify: false,
-    }
-  );
-  console.log(result);
+  try {
+    const result = await Product.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: updatedData,
+      },
+      {
+        //third parameter
+        new: true,
+        useFindAndModify: false,
+      }
+    );
+    console.log(result);
+  } catch (error) {
+    console.error(error.message);
+  }
 });
 
 //delete product
 router.delete("/:id", async (req, res) => {
-    const result = await Product.deleteOne({_id: req.params.id});
-    console.log(result)
+  try {
+    const result = await Product.deleteOne({ _id: req.params.id });
+    console.log(result);
+  } catch (error) {
+    console.error(error.message);
+  }
 });
 
 module.exports = router;
