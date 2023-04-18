@@ -38,7 +38,7 @@ router.post("/all", async (req, res) => {
 //updateOne works similar way with the third parameter
 router.put("/:id", async (req, res) => {
   const updatedData = req.body;
-  console.log(updatedData);
+
   const result = await Product.findByIdAndUpdate(
     { _id: req.params.id },
     {
@@ -54,6 +54,9 @@ router.put("/:id", async (req, res) => {
 });
 
 //delete product
-router.delete("/:id", async (req, res) => {});
+router.delete("/:id", async (req, res) => {
+    const result = await Product.deleteOne({_id: req.params.id});
+    console.log(result)
+});
 
 module.exports = router;
