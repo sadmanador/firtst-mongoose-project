@@ -18,7 +18,10 @@ router.post("/", async (req, res) => {
 });
 
 //post multiple product
-router.post("/all", async (req, res) => {});
+router.post("/all", async (req, res) => {
+    const result  = await Product.insertMany(req.body);
+    console.log(result)
+});
 
 //put product
 router.get("/:id", async (req, res) => {});
