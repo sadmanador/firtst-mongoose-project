@@ -5,10 +5,15 @@ const productSchema = require("../schemas/productsSchema");
 const Product = new mongoose.model("Product", productSchema);
 
 //get all the products
-router.get("/", async (req, res) => {});
+router.get("/", async (req, res) => {
+    const result = await Product.find({})
+    res.send(result)
+});
 
 //get a single product
-router.get("/:id", async (req, res) => {});
+router.get("/:id", async (req, res) => {
+    
+});
 
 //post product
 router.post("/", async (req, res) => {
@@ -24,13 +29,19 @@ router.post("/all", async (req, res) => {
 });
 
 //put product
+//updateOne works similar way with the third parameter
 router.put("/:id", async (req, res) => {
   const updatedData = req.body;
   console.log(updatedData);
-  const result = await Product.updateOne(
+  const result = await Product.findByIdAndUpdate(
     { _id: req.params.id },
     {
-      $set: updatedData
+      $set: updatedData,
+    },
+    //third parameter
+    {
+      new: true,
+      useFindAndModify: false,
     }
   );
   console.log(result);
