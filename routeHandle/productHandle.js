@@ -6,10 +6,11 @@ const Product = new mongoose.model("Product", productSchema);
 
 //get all the products
 //find({supports query like active: "active"})
-//select now blocks the Date, select take 0=false, 1=true
 //.limit(n) n= # selects n amount of data
 router.get("/", async (req, res) => {
   try {
+
+    //selects with Date field, select take 0=false, 1=true
     const result = await Product.find({}).select({
       Date: 0,
     });

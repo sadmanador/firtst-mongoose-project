@@ -3,13 +3,12 @@ const app = express();
 const port = process.env.PORT || 5000;
 const mongoose = require("mongoose");
 const cors = require("cors");
-const productHandler = require('./routeHandle/productHandle')
+const productHandler = require("./routeHandle/productHandle");
 require("dotenv").config();
 
 //middleware
 app.use(cors());
 app.use(express.json());
-
 
 //database connection with mongodb
 const dataBase = (module.exports = () => {
@@ -30,15 +29,14 @@ const dataBase = (module.exports = () => {
 dataBase();
 
 //application routes
-app.use('/products', productHandler)
-
+app.use("/products", productHandler);
 
 //default error handler
-function errorHandler (err, req, res, next){
-  if(res.headersSent){
-    return next(err)
+function errorHandler(err, req, res, next) {
+  if (res.headersSent) {
+    return next(err);
   }
-  res.status(500).json({error: err})
+  res.status(500).json({ error: err });
 }
 
 app.get("/", (req, res) => {
