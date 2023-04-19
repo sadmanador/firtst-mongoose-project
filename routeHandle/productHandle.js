@@ -96,11 +96,15 @@ router.delete("/:id", async (req, res) => {
 });
 
 //deleteMany by id
-router.delete("/delete-many", async (req, res) => {
+router.delete("/", async (req, res) => {
   try {
-    const idsToDelete = req.body.search;
+    const idsToDelete = req.body.ids;
+    console.log(idsToDelete)
     const result = await Product.deleteMany({ _id: { $in: idsToDelete } });
-  } catch (error) {
+    console.log(result)
+    res.send(result);
+  } 
+  catch (error) {
     console.error(error.message);
   }
 });
