@@ -4,6 +4,7 @@ const port = process.env.PORT || 5000;
 const mongoose = require("mongoose");
 const cors = require("cors");
 const productHandler = require("./routeHandle/productHandle");
+const orderHandler = require('./routeHandle/orderHandle');
 require("dotenv").config();
 
 //middleware
@@ -30,6 +31,9 @@ dataBase();
 
 //application routes
 app.use("/products", productHandler);
+
+//application for order
+app.use("/orders", orderHandler);
 
 //default error handler
 function errorHandler(err, req, res, next) {
