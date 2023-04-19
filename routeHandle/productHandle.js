@@ -9,11 +9,23 @@ const Product = new mongoose.model("Product", productSchema);
 //.limit(n) n= # selects n amount of data
 router.get("/", async (req, res) => {
   try {
-
     //selects with Date field, select take 0=false, 1=true
     const result = await Product.find({}).select({
       Date: 0,
     });
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+//returns all matches with query search
+router.get("/search", async (req, res) => {
+  try {
+    const query = req.body.search;
+    console.log(query)
+    const regex = new RegExp(query, "i");
+    const result = await Product.find({ name: regex });
     res.send(result);
   } catch (error) {
     console.error(error.message);
