@@ -23,7 +23,6 @@ router.get("/", async (req, res) => {
 router.get("/search", async (req, res) => {
   try {
     const query = req.body.search;
-    console.log(query)
     const regex = new RegExp(query, "i");
     const result = await Product.find({ name: regex });
     res.send(result);
@@ -91,6 +90,16 @@ router.delete("/:id", async (req, res) => {
   try {
     const result = await Product.deleteOne({ _id: req.params.id });
     console.log(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+//deleteMany by id
+router.delete("/delete-many", async (req, res) => {
+  try {
+    const idsToDelete = req.body.search;
+    const result = await Product.deleteMany({ _id: { $in: idsToDelete } });
   } catch (error) {
     console.error(error.message);
   }
