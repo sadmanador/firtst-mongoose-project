@@ -35,11 +35,10 @@ const productSchema = mongoose.Schema({
   status: String,
   option: [String],
   discount: {
+    default: 0,
     type: Number,
-    default: function () {
-      return 0;
     }
-  },
+  ,
   shipping: Number,
   quantity: { type: Number },
   date: {
