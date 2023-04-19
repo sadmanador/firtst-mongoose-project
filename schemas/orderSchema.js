@@ -1,5 +1,21 @@
 const mongoose = require("mongoose");
 
+const selectedProductsSchema = new mongoose.Schema({
+  products: [
+    {
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+        required: true,
+      },
+      quantity: {
+        type: Number,
+        default: 0,
+      },
+    },
+  ],
+});
+
 const orderSchema = mongoose.Schema({
   date: {
     type: Date,
@@ -28,16 +44,22 @@ const orderSchema = mongoose.Schema({
   },
   productIds: selectedProductsSchema,
   paymentMode: {
-    enum: ["COD", "nagad", "bKash"],
+    type: String,
   },
   processing: {
-    enum: [true, false],
+    type: Boolean,
+    default: function (){
+      return false},
   },
   readyToDeliver: {
-    enum: [true, false],
+    type: Boolean,
+    default: function (){
+      return false},
   },
   delivered: {
-    enum: [true, false],
+    type: Boolean,
+    default: function (){
+      return false},
   },
   OTP: {
     type: String,
@@ -45,22 +67,6 @@ const orderSchema = mongoose.Schema({
       return Math.floor(100000 + Math.random() * 900000).toString();
     },
   },
-});
-
-const selectedProductsSchema = new mongoose.Schema({
-  products: [
-    {
-      productId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
-        required: true,
-      },
-      quantity: {
-        type: Number,
-        default: 0,
-      },
-    },
-  ],
 });
 
 module.exports = orderSchema;

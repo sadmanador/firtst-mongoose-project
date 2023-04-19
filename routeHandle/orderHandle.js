@@ -7,7 +7,7 @@ const Order = new mongoose.model("Order", orderSchema);
 //get all the orders
 router.get("/", async (req, res) => {
   try {
-    const result = await Order.find({})
+    const result = await Order.find({}).populate("productIds");
     res.send(result);
   } catch (error) {
     console.error(error.message);
@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 //get a single order
 router.get("/:id", async (req, res) => {
   try {
-    const result = await Order.find({ _id: req.params.id });
+    const result = await Order.find({ _id: req.params.id }).populate("productIds");
     res.send(result);
   } catch (error) {
     console.error(error.message);
@@ -38,7 +38,7 @@ router.put("/:id", async (req, res) => {
         new: true,
         useFindAndModify: false,
       }
-    );
+    ).populate("productIds");
     console.log(result);
   } catch (error) {
     console.error(error.message);
@@ -59,7 +59,7 @@ router.put("/:id", async (req, res) => {
         new: true,
         useFindAndModify: false,
       }
-    );
+    ).populate("productIds");
     console.log(result);
   } catch (error) {
     console.error(error.message);
@@ -80,7 +80,7 @@ router.put("/:id", async (req, res) => {
           new: true,
           useFindAndModify: false,
         }
-      );
+      ).populate("productIds");
       console.log(result);
     } catch (error) {
       console.error(error.message);
