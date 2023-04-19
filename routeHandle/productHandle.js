@@ -99,7 +99,6 @@ router.delete("/:id", async (req, res) => {
 router.delete("/", async (req, res) => {
   try {
     const idsToDelete = req.body.ids;
-    console.log(idsToDelete)
     const result = await Product.deleteMany({ _id: { $in: idsToDelete } });
     console.log(result)
     res.send(result);

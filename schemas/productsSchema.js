@@ -24,9 +24,25 @@ const productSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  brand_logo: {
+    type: String,
+    required: true,
+  },
+  stock: {
+    type: Number,
+    required: true,
+  },
+  status: String,
+  option: [String],
+  discount: {
+    type: Number,
+    default: function () {
+      return 0;
+    }
+  },
   shipping: Number,
   quantity: { type: Number },
-  Date: {
+  date: {
     type: Date,
     default: Date.now,
   },
