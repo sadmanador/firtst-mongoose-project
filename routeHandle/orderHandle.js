@@ -81,7 +81,7 @@ router.put("/:id", async (req, res) => {
   const updates = req.body;
 
   try {
-    const result = await Order.findByIdAndUpdate(
+    const result = await Order.save(
       { _id: req.params.id },
       {
         $set: updates,

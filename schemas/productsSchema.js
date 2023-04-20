@@ -44,14 +44,6 @@ const productSchema = mongoose.Schema({
   date: {
     type: Date,
     default: Date.now,
-  },
-  eta: {
-    type: Date,
-    default: function() {
-      const etaDate = new Date();
-      etaDate.setDate(this.date.getDate() + 5);
-      return etaDate;
-    }
   }
 });
 

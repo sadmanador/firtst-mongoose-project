@@ -21,6 +21,7 @@ const orderSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  modification_dates: { type: [Date], default: [] },
   userId: {
     type: String,
     required: true,
@@ -62,6 +63,22 @@ const orderSchema = mongoose.Schema({
       return Math.floor(100000 + Math.random() * 900000).toString();
     },
   },
+  eta: {
+    type: Date,
+    default: function() {
+      const etaDate = new Date();
+      etaDate.setDate(this.date.getDate() + 5);
+      return etaDate;
+    }
+  }
+});
+
+
+//schema middleware
+//middleware that push new dates after saving the order by any modification
+orderSchema.post("save", function (next) {
+  this.modification_dates.push(new Date());
+  next();
 });
 
 module.exports = orderSchema;
