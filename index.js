@@ -2,14 +2,17 @@ const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 const cors = require("cors");
 const productHandler = require("./routeHandle/productHandle");
-const orderHandler = require('./routeHandle/orderHandle');
+const orderHandler = require("./routeHandle/orderHandle");
 require("dotenv").config();
 
 //middleware
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 //database connection with mongodb
 const dataBase = (module.exports = () => {

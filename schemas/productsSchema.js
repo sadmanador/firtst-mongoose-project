@@ -23,10 +23,6 @@ const productSchema = mongoose.Schema({
   img: {
     type: String,
   },
-  brand_logo: {
-    type: String,
-    required: true,
-  },
   stock: {
     type: Number,
     required: true,
@@ -36,14 +32,27 @@ const productSchema = mongoose.Schema({
   discount: {
     default: 0,
     type: Number,
-    }
-  ,
+  },
+  discountedPrice: {
+    type: Number,
+    default: function () {
+      return this.price * (1 - this.discount) || null;
+    },
+  },
   shipping: Number,
   quantity: { type: Number },
   date: {
     type: Date,
     default: Date.now,
   },
+  eta: {
+    type: Date,
+    default: function() {
+      const etaDate = new Date();
+      etaDate.setDate(this.date.getDate() + 5);
+      return etaDate;
+    }
+  }
 });
 
 module.exports = productSchema;
