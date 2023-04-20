@@ -14,25 +14,77 @@ router.get("/", async (req, res) => {
   }
 });
 
-//get a single order
-router.get("/:id", async (req, res) => {
+//processing: false
+router.get("/yet-to-process", async (req, res) => {
   try {
-    const result = await Order.find({ _id: req.params.id }).populate("productIds");
+    const result = await Order.find({ processing: false }).populate(
+      "productIds"
+    );
     res.send(result);
   } catch (error) {
     console.error(error.message);
   }
 });
 
+//readyToDeliver: false
+router.get("/yet-to-delivered", async (req, res) => {
+  try {
+    const result = await Order.find({
+      processing: true,
+      readyToDeliver: true,
+    }).populate("productIds");
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+//delivered: false
+router.get("/delivered", async (req, res) => {
+  try {
+    const result = await Order.find({
+      processing: true,
+      readyToDeliver: true,
+      delivered: true,
+    }).populate("productIds");
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+//get a single order
+router.get("/:id", async (req, res) => {
+  try {
+    const result = await Order.find({ _id: req.params.id }).populate(
+      "productIds"
+    );
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+router.post("/", async (req, res) => {
+  try {
+    const newOrder = new Order(req.body);
+    await newOrder.save();
+    console.log(newProduct);
+    res.send(newOrder);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 //updating the processing
 router.put("/:id", async (req, res) => {
-  const processing = req.body.processing;
+  const updates = req.body;
 
   try {
     const result = await Order.findByIdAndUpdate(
       { _id: req.params.id },
       {
-        $set: { processing: processing },
+        $set: updates,
       },
       {
         new: true,
@@ -45,47 +97,5 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-//updating readyToDeliver
-router.put("/:id", async (req, res) => {
-  const readyToDeliver = req.body.readyToDeliver;
 
-  try {
-    const result = await Order.findByIdAndUpdate(
-      { _id: req.params.id },
-      {
-        $set: { readyToDeliver: readyToDeliver },
-      },
-      {
-        new: true,
-        useFindAndModify: false,
-      }
-    ).populate("productIds");
-    console.log(result);
-  } catch (error) {
-    console.error(error.message);
-  }
-});
-
-//updating the delivered
-router.put("/:id", async (req, res) => {
-    const delivered = req.body.delivered;
-  
-    try {
-      const result = await Order.findByIdAndUpdate(
-        { _id: req.params.id },
-        {
-          $set: { delivered: delivered },
-        },
-        {
-          new: true,
-          useFindAndModify: false,
-        }
-      ).populate("productIds");
-      console.log(result);
-    } catch (error) {
-      console.error(error.message);
-    }
-  });
-
-
-  module.exports = router;
+module.exports = router;

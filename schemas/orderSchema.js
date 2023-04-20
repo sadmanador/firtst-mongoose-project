@@ -28,7 +28,6 @@ const orderSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
-
     maxLength: 50,
   },
   address: {
@@ -39,7 +38,6 @@ const orderSchema = mongoose.Schema({
   phone: {
     type: Number,
     required: true,
-
     max: 16,
   },
   productIds: selectedProductsSchema,
@@ -48,18 +46,15 @@ const orderSchema = mongoose.Schema({
   },
   processing: {
     type: Boolean,
-    default: function (){
-      return false},
+    default: false,
   },
   readyToDeliver: {
     type: Boolean,
-    default: function (){
-      return false},
+    default: false,
   },
   delivered: {
     type: Boolean,
-    default: function (){
-      return false},
+    default: false,
   },
   OTP: {
     type: String,
