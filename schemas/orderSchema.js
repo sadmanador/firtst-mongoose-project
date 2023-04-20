@@ -76,7 +76,7 @@ const orderSchema = mongoose.Schema({
 
 //schema middleware
 //middleware that push new dates after saving the order by any modification
-orderSchema.post("save", function (next) {
+orderSchema.post("updateOne", function (next) {
   this.modification_dates.push(new Date());
   next();
 });

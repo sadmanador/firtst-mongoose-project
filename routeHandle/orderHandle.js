@@ -81,14 +81,10 @@ router.put("/:id", async (req, res) => {
   const updates = req.body;
 
   try {
-    const result = await Order.save(
+    const result = await Order.updateOne(
       { _id: req.params.id },
       {
         $set: updates,
-      },
-      {
-        new: true,
-        useFindAndModify: false,
       }
     ).populate("productIds");
     console.log(result);
