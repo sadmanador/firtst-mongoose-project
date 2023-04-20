@@ -1,8 +1,66 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const multer = require('multer');
+const sizeOf = require('image-size');
 const router = express.Router();
 const productSchema = require("../schemas/productsSchema");
 const Product = new mongoose.model("Product", productSchema);
+
+
+//multer middleware
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+
+//img spec
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 500000, // limit the file size to 500KB
+  },
+  fileFilter: (req, file, cb) => {
+    const dimensions = sizeOf(file.path);
+    if (dimensions.width > 1200 || dimensions.height > 1000) {
+      cb(new Error('Image dimensions too large'));
+    } else {
+      cb(null, true);
+    }
+  },
+});
+
+
+//uploading the img
+// Define route for updating a product with an image
+router.put('/:id', upload.single('img'), (req, res) => {
+  // Find product by ID
+  Product.findById(req.params.id, (err, product) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Internal server error');
+    } else if (!product) {
+      res.status(404).send('Product not found');
+    } else {
+      // Update product image
+      product.img = req.file ? req.file.path : '';
+
+      // Save updated product to database
+      product.save((err) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send('Internal server error');
+        } else {
+          res.status(200).send('Product updated successfully');
+        }
+      });
+    }
+  });
+});
 
 //get all the products
 //find({supports query like active: "active"})

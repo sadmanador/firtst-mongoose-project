@@ -22,7 +22,6 @@ const productSchema = mongoose.Schema({
   ratingsCount: Number,
   img: {
     type: String,
-    required: true,
   },
   brand_logo: {
     type: String,
