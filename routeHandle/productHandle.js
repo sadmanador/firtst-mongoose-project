@@ -1,22 +1,20 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const multer = require('multer');
-const sizeOf = require('image-size');
+const multer = require("multer");
+const sizeOf = require("image-size");
 const router = express.Router();
 const productSchema = require("../schemas/productsSchema");
 const Product = new mongoose.model("Product", productSchema);
 
-
 //multer middleware
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   },
 });
-
 
 //img spec
 const upload = multer({
@@ -27,22 +25,22 @@ const upload = multer({
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png/;
     const mimetype = filetypes.test(file.mimetype);
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const extname = filetypes.test(
+      path.extname(file.originalname).toLowerCase()
+    );
     if (mimetype && extname) {
       cb(null, true);
     } else {
-      cb(new Error('Only JPEG, JPG, and PNG file types are allowed'));
+      cb(new Error("Only JPEG, JPG, and PNG file types are allowed"));
     }
   },
 });
 
-
-
 /// define a route for uploading a product image
-router.post('/upload', upload.single('img'), (req, res, next) => {
+router.post("/upload", upload.single("img"), (req, res, next) => {
   try {
     // encode the image file as a base64 string
-    const img = fs.readFileSync(req.file.path, { encoding: 'base64' });
+    const img = fs.readFileSync(req.file.path, { encoding: "base64" });
     // delete the uploaded image file from the server
     fs.unlinkSync(req.file.path);
     // create a new product document
@@ -53,14 +51,15 @@ router.post('/upload', upload.single('img'), (req, res, next) => {
       img: img,
     });
     // save the product document to the database
-    product.save()
+    product
+      .save()
       .then(() => {
         res.status(200).json({
-          message: 'Product image uploaded successfully',
+          message: "Product image uploaded successfully",
           product: product,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         res.status(500).json({
           error: err,
@@ -74,26 +73,24 @@ router.post('/upload', upload.single('img'), (req, res, next) => {
   }
 });
 
-
 // define a route for getting a product image
-router.get('/products/:id/img', (req, res, next) => {
+router.get("/products/:id/img", (req, res, next) => {
   Product.findById(req.params.id)
-    .then(product => {
+    .then((product) => {
       if (!product) {
         return res.status(404).json({
-          message: 'Product not found',
+          message: "Product not found",
         });
       }
       // send the product image as a response
-      res.writeHead(200, { 'Content-Type': 'image/jpeg' });
-      res.end(Buffer.from(product.img, 'base64'));
+      res.writeHead(200, { "Content-Type": "image/jpeg" });
+      res.end(Buffer.from(product.img, "base64"));
     })
-    .catch(err => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json({ error: err });
-    })
-  })
-
+    });
+});
 
 //get all the products
 //find({supports query like active: "active"})
@@ -106,14 +103,85 @@ router.get("/", async (req, res) => {
   } catch (error) {
     console.error(error.message);
   }
-})
+});
 
-//returns all matches with query search
+//category loading
+//category loader for cap
+router.get("/cap", async (req, res) => {
+  try {
+    const result = await Product.find({ category: "Cap" });
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+//category loader for man sneaker
+router.get("/mans_sneaker", async (req, res) => {
+  try {
+    const result = await Product.find({ category: "Men's Sneaker" });
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+//category loader for man boot
+router.get("/mans_boot", async (req, res) => {
+  try {
+    const result = await Product.find({ category: "Men's Boot" });
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+//category loader for man bottle
+router.get("/bottle", async (req, res) => {
+  try {
+    const result = await Product.find({ category: "Bottle" });
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+//category loader for earphones
+router.get("/earphone", async (req, res) => {
+  try {
+    const result = await Product.find({ category: "Earphones" });
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+//category loader for bag
+router.get("/bag", async (req, res) => {
+  try {
+    const result = await Product.find({ category: "Bag" });
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+//category loader for pants
+router.get("/pants", async (req, res) => {
+  try {
+    const result = await Product.find({ category: "Men's Pants" });
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+
+
+
+
+
+//search in inputField for results based on name
+// I can send in the body anything, doesn't necessary its in schema or not
 router.get("/search", async (req, res) => {
   try {
     const query = req.body.search;
     const regex = new RegExp(query, "i");
-    const result = await Product.find({ name: regex });
+    const result = await Product.find({ name: regex});
     res.send(result);
   } catch (error) {
     console.error(error.message);
@@ -189,10 +257,9 @@ router.delete("/", async (req, res) => {
   try {
     const idsToDelete = req.body.ids;
     const result = await Product.deleteMany({ _id: { $in: idsToDelete } });
-    console.log(result)
+    console.log(result);
     res.send(result);
-  } 
-  catch (error) {
+  } catch (error) {
     console.error(error.message);
   }
 });
