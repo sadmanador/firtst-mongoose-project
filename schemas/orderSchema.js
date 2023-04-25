@@ -45,7 +45,7 @@ const orderSchema = mongoose.Schema({
   paymentMode: {
     type: String,
   },
-  delivery_status: { type: String, default: "ordered" },
+  delivery_status: { type: String, default: "pending" },
   total_price: { type: Number, required: true },
   tax: { type: Number, required: true },
   shipping_fees: { type: Number, required: true },

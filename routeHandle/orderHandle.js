@@ -14,45 +14,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-//processing: false
-router.get("/yet-to-process", async (req, res) => {
-  try {
-    const result = await Order.find({ processing: false }).populate(
-      "productIds"
-    );
-    res.send(result);
-  } catch (error) {
-    console.error(error.message);
-  }
-});
-
-//readyToDeliver: false
-router.get("/yet-to-delivered", async (req, res) => {
-  try {
-    const result = await Order.find({
-      processing: true,
-      readyToDeliver: true,
-    }).populate("productIds");
-    res.send(result);
-  } catch (error) {
-    console.error(error.message);
-  }
-});
-
-//delivered: false
-router.get("/delivered", async (req, res) => {
-  try {
-    const result = await Order.find({
-      processing: true,
-      readyToDeliver: true,
-      delivered: true,
-    }).populate("productIds");
-    res.send(result);
-  } catch (error) {
-    console.error(error.message);
-  }
-});
-
 //get a single order
 router.get("/:id", async (req, res) => {
   try {
@@ -65,6 +26,72 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+
+//all pending
+router.get("/status_pending", async (req, res) => {
+  try {
+    const result = await Order.find({ delivery_status: "pending" }).populate(
+      "productIds"
+    );
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+
+//all processing status
+router.get("/status_pending", async (req, res) => {
+  try {
+    const result = await Order.find({ delivery_status: "processing" }).populate(
+      "productIds"
+    );
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+
+//all ready to deliver status
+router.get("/status_pending", async (req, res) => {
+  try {
+    const result = await Order.find({ delivery_status: "readyToDeliver" }).populate(
+      "productIds"
+    );
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+//all delivered status
+router.get("/status_pending", async (req, res) => {
+  try {
+    const result = await Order.find({ delivery_status: "delivered" }).populate(
+      "productIds"
+    );
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+
+//all return status
+router.get("/status_pending", async (req, res) => {
+  try {
+    const result = await Order.find({ delivery_status: "returned" }).populate(
+      "productIds"
+    );
+    res.send(result);
+  } catch (error) {
+    console.error(error.message);
+  }
+});
+
+
+//making an order
 router.post("/", async (req, res) => {
   try {
     const newOrder = new Order(req.body);
@@ -76,22 +103,17 @@ router.post("/", async (req, res) => {
   }
 });
 
-//updating the processing
-router.put("/:id", async (req, res) => {
-  const updates = req.body;
+//set delivery_status: "processing"
+router.put('/:id', async (req, res)=> {
+  const status = req.body;
 
   try {
-    const result = await Order.updateOne(
-      { _id: req.params.id },
-      {
-        $set: updates,
-      }
-    ).populate("productIds");
-    console.log(result);
+    const result = await Order.findById(status);
+    await result.save();
   } catch (error) {
-    console.error(error.message);
+    console.error(error.message)
   }
-});
+})
 
 
 module.exports = router;
