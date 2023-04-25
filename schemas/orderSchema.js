@@ -45,17 +45,16 @@ const orderSchema = mongoose.Schema({
   paymentMode: {
     type: String,
   },
-  processing: {
-    type: Boolean,
-    default: false,
-  },
-  readyToDeliver: {
-    type: Boolean,
-    default: false,
-  },
-  delivered: {
-    type: Boolean,
-    default: false,
+  delivery_status: { type: String, default: "ordered" },
+  total_price: { type: Number, required: true },
+  tax: { type: Number, required: true },
+  shipping_fees: { type: Number, required: true },
+  subtotal: {
+    type: Number,
+    required: true,
+    default: function () {
+      return this.total_price + this.tax + this.shipping_fees;
+    },
   },
   OTP: {
     type: String,
@@ -65,14 +64,13 @@ const orderSchema = mongoose.Schema({
   },
   eta: {
     type: Date,
-    default: function() {
+    default: function () {
       const etaDate = new Date();
       etaDate.setDate(this.date.getDate() + 5);
       return etaDate;
-    }
-  }
+    },
+  },
 });
-
 
 //schema middleware
 //middleware that push new dates after saving the order by any modification
